@@ -15,12 +15,26 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
-
 #include "Arduino.h"
 #include "SPI.h"
 #include <MC145192.h>
 
-AD9954::AD9954()
-{   
+MC145192::MC145192(byte cs_pin)
+{
+    _cs_pin = cs_pin;
+    pinMode(_cs_pin, OUTPUT);
+    digitalWrite(_cs_pin, HIGH);
+}
+
+void MC145192::write(unsigned long data)
+{
+    digitalWrite(_cs_pin, LOW);
+
+    // MSB first
+    for(int i = 2; i >= 0 ; i--)
+    {
+        SPI.transfer(lowByte(data >> 8 * i));
+    }
+
+    digitalWrite(_cs_pin, HIGH);
 }

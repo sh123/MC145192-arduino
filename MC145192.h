@@ -14,9 +14,7 @@
    You should have received a copy of the GNU General Public License
    aunsigned long with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
  */
-
 #ifndef MC145192_h
 #define MC145192_h
 
@@ -26,6 +24,12 @@ class MC145192
 {
     public: 
         MC145192();
+
+    private:
+        void write(unsigned long);
+
+    private:
+        byte _cs_pin;
 };
  
 #endif
