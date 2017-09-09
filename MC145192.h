@@ -30,14 +30,24 @@
 #define MC145192_C_OUTB(val) (val << 0)  // output B state
 
 // A register
-#define MC145192_A_OUT(val) (val << 22)  // data out port
-#define MC145192_A_FILL (3 << 20)        // 11 fill values
-#define MC145192_A_NREG(val) (val << 8)  // N reg value 
-#define MC145192_A_AREG(val) (val << 0)  // A reg value
+#define MC145192_A_OUT(val) ((unsigned long)val << 22)  // data out port
+#define MC145192_A_FILL ((unsigned long)3 << 20)        // 11 fill values
+#define MC145192_A_NREG(val) ((unsigned long)val << 8)  // N reg value 
+#define MC145192_A_AREG(val) ((unsigned long)val << 0)  // A reg value
 
 // R register
-#define MC145192_R_REF(val) (val << 13)  // reference mode
-#define MC145192_R_RREG(val) (val << 0)  // R reg value
+#define MC145192_R_REF(val) ((unsigned int)val << 13)  // reference mode
+#define MC145192_R_RREG(val) ((unsigned int)val << 0)  // R reg value
+
+// reference modes
+#define MC145192_REF_SHUTDOWN   0
+#define MC145192_REF_ACTIVE     1
+#define MC145192_REF_LOW        2
+#define MC145192_REF_1          3
+#define MC145192_REF_2          4 
+#define MC145192_REF_4          5
+#define MC145192_REF_8          6
+#define MC145192_REF_16         7
 
 class MC145192
 {

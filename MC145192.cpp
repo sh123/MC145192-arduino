@@ -39,7 +39,10 @@ void MC145192::write_registers()
 {
     digitalWrite(ss_pin_, LOW);
 
+    SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
+
     // MSB first
+    delayMicroseconds(1);
   
     // C, 1 byte
     SPI.transfer(reg_c_);
@@ -56,6 +59,7 @@ void MC145192::write_registers()
         SPI.transfer(lowByte(reg_a_ >> 8 * i));
     }
 
-    digitalWrite(ss_pin_, HIGH);
+    SPI.endTransaction();
 
+    digitalWrite(ss_pin_, HIGH);
 }
