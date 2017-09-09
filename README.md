@@ -17,11 +17,7 @@ MC145192 specification - http://pdf.datasheetcatalog.com/datasheet/motorola/MC14
     
     MC145192 PLL(CS_PIN);
    
-    void setup(){
-        SPI.begin();
-        SPI.setClockDivider(6);
-        SPI.setDataMode(SPI_MODE0);
-        
-        // TBD, PLL.initialize();
+    void setup(){        
+        // TBD
     }
     
