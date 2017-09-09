@@ -20,16 +20,40 @@
 
 #include "Arduino.h"
 
+// C register
+#define MC145192_C_POL(val) (val << 7)   // detector out polarity
+#define MC145192_C_PDA(val) (val << 6)   // select phase/frequency detector
+#define MC145192_C_LDE(val) (val << 5)   // enable lock detector
+#define MC145192_C_STBY(val) (val << 4)  // set to standby
+#define MC145192_C_I2I1(val) (val << 2)  // PDout current
+#define MC145192_C_PORT(val) (val << 1)  // output A state
+#define MC145192_C_OUTB(val) (val << 0)  // output B state
+
+// A register
+#define MC145192_A_OUT(val) (val << 22)  // data out port
+#define MC145192_A_FILL (3 << 20)        // 11 fill values
+#define MC145192_A_NREG(val) (val << 8)	 // N reg value 
+#define MC145192_A_AREG(val) (val << 0)  // A reg value
+
+// R register
+#define MC145192_R_REF(val) (val << 13)  // reference mode
+#define MC145192_R_RREG(val) (val << 0)  // R reg value
+
 class MC145192
 {
     public: 
-        MC145192();
+        MC145192(byte);
+        void set_registers(byte, unsigned int, unsigned long);
 
     private:
-        void write(unsigned long);
+        void write_registers();
 
     private:
-        byte _cs_pin;
+        byte ss_pin_;
+
+        byte reg_c_;
+        unsigned int reg_r_;
+        unsigned long reg_a_;
 };
  
 #endif

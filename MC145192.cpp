@@ -19,22 +19,43 @@
 #include "SPI.h"
 #include <MC145192.h>
 
-MC145192::MC145192(byte cs_pin)
+MC145192::MC145192(byte ss_pin)
 {
-    _cs_pin = cs_pin;
-    pinMode(_cs_pin, OUTPUT);
-    digitalWrite(_cs_pin, HIGH);
+    ss_pin_ = ss_pin;
+    pinMode(ss_pin_, OUTPUT);
+    digitalWrite(ss_pin_, HIGH);
 }
 
-void MC145192::write(unsigned long data)
+void MC145192::set_registers(byte c, unsigned int r, unsigned long a)
 {
-    digitalWrite(_cs_pin, LOW);
+    reg_c_ = c;
+    reg_r_ = r;
+    reg_a_ = a;
+
+    write_registers();
+}
+
+void MC145192::write_registers()
+{
+    digitalWrite(ss_pin_, LOW);
 
     // MSB first
-    for(int i = 2; i >= 0 ; i--)
+  
+    // C, 1 byte
+    SPI.transfer(reg_c_);
+
+    // R, 2 bytes
+    for(int i = 1; i >= 0 ; i--)
     {
-        SPI.transfer(lowByte(data >> 8 * i));
+        SPI.transfer(lowByte(reg_r_ >> 8 * i));
     }
 
-    digitalWrite(_cs_pin, HIGH);
+    // A, 3 bytes
+    for(int i = 2; i >= 0 ; i--)
+    {
+        SPI.transfer(lowByte(reg_a_ >> 8 * i));
+    }
+
+    digitalWrite(ss_pin_, HIGH);
+
 }
