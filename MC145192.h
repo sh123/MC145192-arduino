@@ -32,7 +32,7 @@
 // A register
 #define MC145192_A_OUT(val) (val << 22)  // data out port
 #define MC145192_A_FILL (3 << 20)        // 11 fill values
-#define MC145192_A_NREG(val) (val << 8)	 // N reg value 
+#define MC145192_A_NREG(val) (val << 8)  // N reg value 
 #define MC145192_A_AREG(val) (val << 0)  // A reg value
 
 // R register
