@@ -24,6 +24,7 @@ MC145192::MC145192(byte ss_pin)
     ss_pin_ = ss_pin;
     pinMode(ss_pin_, OUTPUT);
     digitalWrite(ss_pin_, HIGH);
+    SPI.setClockDivider(255);
 }
 
 void MC145192::set_registers(byte c, unsigned int r, unsigned long a)
@@ -35,31 +36,77 @@ void MC145192::set_registers(byte c, unsigned int r, unsigned long a)
     write_registers();
 }
 
-void MC145192::write_registers()
+void MC145192::write_c()
 {
+    // C, 1 byte
     digitalWrite(ss_pin_, LOW);
 
-    SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
+    SPI.beginTransaction(SPISettings(500000, MSBFIRST, SPI_MODE0));
 
-    // MSB first
     delayMicroseconds(1);
-  
-    // C, 1 byte
+
     SPI.transfer(reg_c_);
-
-    // R, 2 bytes
-    for(int i = 1; i >= 0 ; i--)
-    {
-        SPI.transfer(lowByte(reg_r_ >> 8 * i));
-    }
-
-    // A, 3 bytes
-    for(int i = 2; i >= 0 ; i--)
-    {
-        SPI.transfer(lowByte(reg_a_ >> 8 * i));
-    }
 
     SPI.endTransaction();
 
     digitalWrite(ss_pin_, HIGH);
+}
+
+void MC145192::write_r()
+{
+    // R, 2 bytes
+    digitalWrite(ss_pin_, LOW);
+
+    SPI.beginTransaction(SPISettings(500000, MSBFIRST, SPI_MODE0));
+
+    delayMicroseconds(1);
+
+    for(int i = 1; i >= 0 ; i--)
+    {
+        SPI.transfer(lowByte(reg_r_ >> 8 * i));
+    }
+    SPI.endTransaction();
+
+    digitalWrite(ss_pin_, HIGH);
+    delayMicroseconds(1);
+
+    digitalWrite(ss_pin_, LOW);
+    delayMicroseconds(1);
+
+    digitalWrite(ss_pin_, HIGH);
+}
+
+void MC145192::write_a()
+{
+    // A, 3 bytes
+    digitalWrite(ss_pin_, LOW);
+
+    SPI.beginTransaction(SPISettings(500000, MSBFIRST, SPI_MODE0));
+
+    delayMicroseconds(1);
+
+    for(int i = 2; i >= 0 ; i--)
+    {
+        SPI.transfer(lowByte(reg_a_ >> 8 * i));
+    }
+    SPI.endTransaction();
+
+    digitalWrite(ss_pin_, HIGH);
+}
+
+void MC145192::write_registers()
+{
+    // MSB first
+ 
+    // C, 1 byte
+    write_c();
+    delayMicroseconds(1);
+
+    // R, 2 bytes
+    write_r();
+    delayMicroseconds(1);
+
+    // A, 3 bytes
+    write_a();
+    delayMicroseconds(1);
 }
