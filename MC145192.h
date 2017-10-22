@@ -41,6 +41,10 @@
 #define MC145192_LDE_DISABLE    0
 #define MC145192_LDE_ENABLE     1
 
+// 4, stand by
+#define MC145192_STBY_DISABLE   0
+#define MC145192_STBY_ENABLE    1
+
 // 3,2 i2, i1 curents 
 #define MC145192_I2I1_70_25     0
 #define MC145192_I2I1_80_50     1
